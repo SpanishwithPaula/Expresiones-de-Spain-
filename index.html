@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Expresiones españolas B2–C1</title>
+<style>
+  :root{
+    --bg:#fff8ef;
+    --ink:#1f2430;
+    --card:#ffffff;
+    --accent:#e2553d;
+    --accent2:#f2b544;
+    --navy:#23395d;
+    --soft:#f6e7d7;
+    --ok:#2d8a66;
+    --bad:#b94343;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    background:linear-gradient(180deg,#fff8ef 0%,#fffdf9 100%);
+    color:var(--ink);
+  }
+  header{
+    padding:38px 20px 24px;
+    text-align:center;
+    background:
+      radial-gradient(circle at 10% 20%, rgba(242,181,68,.28), transparent 20%),
+      radial-gradient(circle at 90% 10%, rgba(226,85,61,.18), transparent 22%),
+      #fff4e5;
+    border-bottom:4px solid var(--accent2);
+  }
+  h1{font-size:clamp(2.1rem,5vw,4.6rem);margin:0 0 8px;color:var(--navy)}
+  header p{font-size:clamp(1rem,2vw,1.3rem);margin:0 auto;max-width:850px;line-height:1.5}
+  .wrap{max-width:1180px;margin:auto;padding:24px}
+  .controls{
+    display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:12px 0 28px
+  }
+  button,.chip{
+    border:none;border-radius:999px;padding:12px 18px;font-weight:800;cursor:pointer;
+    background:var(--navy);color:#fff;font-size:1rem;
+  }
+  .chip{background:#fff;color:var(--navy);border:2px solid #d8dce5}
+  .chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .section-title{font-size:2rem;color:var(--navy);margin:34px 0 14px}
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(255px,1fr));
+    gap:16px;
+  }
+  .card{
+    min-height:230px;
+    perspective:1000px;
+    cursor:pointer;
+  }
+  .card-inner{
+    position:relative;width:100%;height:100%;min-height:230px;
+    transition:transform .55s;transform-style:preserve-3d;
+  }
+  .card.flipped .card-inner{transform:rotateY(180deg)}
+  .face{
+    position:absolute;inset:0;backface-visibility:hidden;
+    border-radius:22px;padding:22px;
+    box-shadow:0 10px 28px rgba(35,57,93,.12);
+    border:1px solid #ece7df;
+  }
+  .front{background:var(--card)}
+  .back{background:var(--navy);color:#fff;transform:rotateY(180deg)}
+  .tag{
+    display:inline-block;background:var(--soft);color:#7a4f1f;border-radius:999px;
+    padding:6px 10px;font-size:.78rem;font-weight:800;margin-bottom:12px
+  }
+  .front h3{font-size:1.55rem;margin:6px 0 14px;color:var(--accent)}
+  .front p,.back p{line-height:1.55}
+  .hint{opacity:.65;font-size:.85rem;margin-top:18px}
+  .box{
+    background:#fff;border-radius:24px;padding:22px;
+    box-shadow:0 10px 30px rgba(35,57,93,.09);margin:18px 0;
+  }
+  .quiz-q{font-size:1.2rem;font-weight:800;margin-bottom:14px}
+  .answers{display:grid;gap:10px}
+  .answers button{
+    text-align:left;background:#f7f8fb;color:var(--ink);
+    border:2px solid transparent;border-radius:14px;
+  }
+  .answers button:hover{border-color:var(--accent2)}
+  .feedback{margin-top:12px;font-weight:800}
+  .ok{color:var(--ok)} .bad{color:var(--bad)}
+  .scenario{
+    background:linear-gradient(135deg,#fff,#fff6e7);
+    border-left:6px solid var(--accent2);
+    border-radius:18px;padding:18px;margin:12px 0;
+  }
+  .scenario strong{color:var(--navy)}
+  .random-card{
+    text-align:center;padding:34px 20px;background:var(--navy);color:#fff;border-radius:24px;
+  }
+  .random-card .expr{font-size:clamp(1.8rem,4vw,3rem);font-weight:900;margin:10px 0}
+  footer{text-align:center;padding:30px;color:#657084}
+  @media print{
+    .controls,.hint,#randomBtn{display:none!important}
+    body{background:#fff}
+    .card{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Expresiones españolas B2–C1 🇪🇸</h1>
+  <p>Haz clic en las tarjetas para ver el significado, el equivalente aproximado en inglés y un ejemplo natural.</p>
+</header>
+
+<main class="wrap">
+  <div class="controls" id="filters"></div>
+
+  <h2 class="section-title">🃏 Tarjetas de expresiones</h2>
+  <div class="grid" id="cards"></div>
+
+  <h2 class="section-title">🎲 Expresión aleatoria</h2>
+  <div class="random-card">
+    <div>Usa esta expresión en una frase o mini historia:</div>
+    <div class="expr" id="randomExpr">Pulsa el botón</div>
+    <button id="randomBtn">Dame otra expresión</button>
+  </div>
+
+  <h2 class="section-title">🧠 Mini quiz</h2>
+  <div class="box" id="quiz"></div>
+
+  <h2 class="section-title">🗣️ Conversación</h2>
+  <div class="box">
+    <div class="scenario"><strong>1.</strong> Tu amigo quiere que trabajes gratis el domingo a las 6:00 a. m. Responde usando una expresión.</div>
+    <div class="scenario"><strong>2.</strong> Un restaurante te cobró muchísimo por una cena mediocre. Usa una expresión para describirlo.</div>
+    <div class="scenario"><strong>3.</strong> No dormiste nada porque había ruido toda la noche. ¿Qué dices?</div>
+    <div class="scenario"><strong>4.</strong> Tu compañero cometió un error social muy incómodo. Describe lo que pasó.</div>
+    <div class="scenario"><strong>5.</strong> Una persona llegó tarde, no ayudó y encima se quejó. Reacciona usando una expresión coloquial.</div>
+  </div>
+</main>
+
+<footer>Hecho para practicar español natural de nivel B2–C1.</footer>
+
+<script>
+const data = [
+  {e:"¡Hala! / ¡Ala!",cat:"Sorpresa",m:"Expresa sorpresa, ánimo o incredulidad.",en:"Wow! / Come on!",ex:"¡Hala! ¿Te has comprado otro coche?"},
+  {e:"Me importa un comino",cat:"Indiferencia",m:"No me importa en absoluto.",en:"I couldn't care less.",ex:"Me importa un comino lo que piense."},
+  {e:"Ni de coña",cat:"Rechazo",m:"De ninguna manera. Muy coloquial.",en:"No freaking way.",ex:"¿Trabajar gratis? Ni de coña."},
+  {e:"Estar hasta las narices",cat:"Enfado",m:"Estar harto de algo o alguien.",en:"To be fed up.",ex:"Estoy hasta las narices de este ruido."},
+  {e:"Ser la leche",cat:"Sorpresa",m:"Ser increíble, impresionante o muy bueno.",en:"To be amazing.",ex:"Ese concierto fue la leche."},
+  {e:"¡Qué fuerte!",cat:"Sorpresa",m:"Reacción de sorpresa, incredulidad o indignación.",en:"That's crazy!",ex:"¿La despidieron por eso? ¡Qué fuerte!"},
+  {e:"Me da igual",cat:"Indiferencia",m:"No tengo preferencia o no me importa.",en:"I don't mind / I don't care.",ex:"Me da igual dónde cenemos."},
+  {e:"No tener ni idea",cat:"Conocimiento",m:"No saber absolutamente nada sobre algo.",en:"To have no clue.",ex:"No tengo ni idea de dónde está."},
+  {e:"Estar de mala leche",cat:"Enfado",m:"Estar de muy mal humor.",en:"To be in a really bad mood.",ex:"Hoy está de mala leche."},
+  {e:"Ir a su bola",cat:"Actitud",m:"Hacer lo que uno quiere sin prestar mucha atención a los demás.",en:"To do one's own thing.",ex:"Déjalo, siempre va a su bola."},
+  {e:"Costar un ojo de la cara",cat:"Dinero",m:"Ser extremadamente caro.",en:"To cost an arm and a leg.",ex:"Ese piso cuesta un ojo de la cara."},
+  {e:"Tomar el pelo",cat:"Broma",m:"Bromear con alguien o intentar engañarlo.",en:"To pull someone's leg.",ex:"¿Me estás tomando el pelo?"},
+  {e:"Meter la pata",cat:"Errores",m:"Cometer un error, especialmente social.",en:"To put your foot in it.",ex:"Le pregunté por su novio y habían roto. Metí la pata."},
+  {e:"Montar un pollo",cat:"Conflicto",m:"Crear un escándalo o una discusión grande.",en:"To make a scene.",ex:"Montó un pollo en el restaurante."},
+  {e:"Pasarse de la raya",cat:"Conflicto",m:"Ir demasiado lejos con un comentario o comportamiento.",en:"To cross the line.",ex:"Una cosa es bromear y otra pasarse de la raya."},
+  {e:"Tener morro",cat:"Actitud",m:"Ser descarado o aprovechado.",en:"To have some nerve.",ex:"¡Qué morro! Llegó tarde y encima se quejó."},
+  {e:"Estar hecho polvo",cat:"Estado",m:"Estar agotado o emocionalmente muy afectado.",en:"To be exhausted / devastated.",ex:"Después del viaje estaba hecho polvo."},
+  {e:"No pegar ojo",cat:"Estado",m:"No dormir nada.",en:"Not sleep a wink.",ex:"Anoche no pegué ojo."},
+  {e:"Ponerse las pilas",cat:"Acción",m:"Empezar a esforzarse o actuar en serio.",en:"To get your act together.",ex:"Tengo examen el viernes. Tengo que ponerme las pilas."},
+  {e:"Tirar la casa por la ventana",cat:"Dinero",m:"Gastar mucho dinero en una ocasión especial.",en:"To spare no expense.",ex:"Para la boda tiraron la casa por la ventana."},
+  {e:"Ni fu ni fa",cat:"Opinión",m:"No producir una impresión positiva ni negativa.",en:"So-so / neither here nor there.",ex:"La película, ni fu ni fa."},
+  {e:"Menudo rollo",cat:"Opinión",m:"Algo muy aburrido, pesado o molesto.",en:"What a drag.",ex:"La reunión duró tres horas. Menudo rollo."},
+  {e:"Se te va la olla",cat:"Actitud",m:"Estás diciendo o haciendo algo absurdo o exagerado.",en:"You're losing it.",ex:"¿Vas a pagar 500 euros por eso? Se te va la olla."},
+  {e:"Tener tela",cat:"Sorpresa",m:"Algo tiene mucha complicación, gravedad o dificultad.",en:"That's something / That's a lot.",ex:"Lo de tu jefe tiene tela."},
+  {e:"Estar en las nubes",cat:"Estado",m:"Estar distraído.",en:"To have your head in the clouds.",ex:"Hoy estás en las nubes."},
+  {e:"A buenas horas",cat:"Ironía",m:"Se dice cuando algo llega demasiado tarde.",en:"About time / Too little, too late.",ex:"Ahora quieres ayudar. ¡A buenas horas!"},
+  {e:"Por los pelos",cat:"Resultado",m:"Por muy poco.",en:"By the skin of your teeth.",ex:"Llegamos al tren por los pelos."},
+  {e:"De perdidos al río",cat:"Decisión",m:"Ya que la situación es arriesgada, seguimos adelante.",en:"In for a penny, in for a pound.",ex:"Ya hemos venido hasta aquí; de perdidos al río."},
+  {e:"No me rayes",cat:"Conflicto",m:"No me agobies, molestes o des demasiadas vueltas.",en:"Don't stress me out / Don't bug me.",ex:"No me rayes con el mismo tema otra vez."},
+  {e:"Tener un cacao",cat:"Estado",m:"Estar muy confundido o tener una situación desordenada.",en:"To be all mixed up.",ex:"Tengo un cacao con todas estas fechas."},
+  {e:"Otro gallo cantaría",cat:"Hipótesis",m:"La situación sería muy diferente si cambiara cierta condición.",en:"Things would be very different.",ex:"Si hubieras estudiado, otro gallo cantaría."}
+];
+
+const cats = ["Todas",...new Set(data.map(x=>x.cat))];
+const filters = document.getElementById("filters");
+const cards = document.getElementById("cards");
+
+function drawFilters(){
+  filters.innerHTML = cats.map((c,i)=>`<button class="chip ${i===0?'active':''}" data-cat="${c}">${c}</button>`).join("");
+  filters.querySelectorAll("button").forEach(b=>b.onclick=()=>{
+    filters.querySelectorAll("button").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    drawCards(b.dataset.cat);
+  });
+}
+function drawCards(cat="Todas"){
+  const list = cat==="Todas" ? data : data.filter(x=>x.cat===cat);
+  cards.innerHTML = list.map(x=>`
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="card-inner">
+        <div class="face front">
+          <span class="tag">${x.cat}</span>
+          <h3>${x.e}</h3>
+          <p>${x.ex}</p>
+          <div class="hint">Haz clic para ver significado + inglés</div>
+        </div>
+        <div class="face back">
+          <h3>${x.e}</h3>
+          <p><strong>Significado:</strong> ${x.m}</p>
+          <p><strong>English:</strong> ${x.en}</p>
+          <p><strong>Ejemplo:</strong> ${x.ex}</p>
+        </div>
+      </div>
+    </div>`).join("");
+}
+drawFilters(); drawCards();
+
+document.getElementById("randomBtn").onclick = ()=>{
+  const x=data[Math.floor(Math.random()*data.length)];
+  document.getElementById("randomExpr").textContent=x.e;
+};
+
+const quizData = [
+  {q:"¿Qué expresión usarías para decir que algo es carísimo?",a:["Meter la pata","Costar un ojo de la cara","Ir a su bola"],c:1},
+  {q:"Tu amigo te propone algo que rechazas completamente. ¿Qué dices?",a:["Ni de coña","Por los pelos","Ni fu ni fa"],c:0},
+  {q:"Has cometido un error social incómodo.",a:["Has metido la pata","Has tirado la casa por la ventana","Estás en las nubes"],c:0},
+  {q:"No dormiste nada anoche.",a:["No pegaste ojo","Te pusiste las pilas","Montaste un pollo"],c:0},
+  {q:"Alguien hace siempre lo que quiere sin prestar atención al grupo.",a:["Va a su bola","Está hecho polvo","Tiene un cacao"],c:0},
+  {q:"Una persona crea un gran escándalo en público.",a:["Monta un pollo","Se pone las pilas","Le da igual"],c:0}
+];
+let qi=0,score=0;
+function renderQuiz(){
+  const q=quizData[qi];
+  document.getElementById("quiz").innerHTML=`
+    <div class="quiz-q">${qi+1}/${quizData.length} · ${q.q}</div>
+    <div class="answers">
+      ${q.a.map((x,i)=>`<button onclick="answer(${i})">${x}</button>`).join("")}
+    </div>
+    <div class="feedback" id="fb"></div>`;
+}
+window.answer=function(i){
+  const q=quizData[qi], fb=document.getElementById("fb");
+  if(i===q.c){score++;fb.textContent="✅ ¡Correcto!";fb.className="feedback ok";}
+  else{fb.textContent=`❌ Mejor: ${q.a[q.c]}`;fb.className="feedback bad";}
+  document.querySelectorAll(".answers button").forEach(b=>b.disabled=true);
+  setTimeout(()=>{
+    qi++;
+    if(qi<quizData.length) renderQuiz();
+    else document.getElementById("quiz").innerHTML=`<div class="quiz-q">Resultado: ${score}/${quizData.length}</div><button onclick="qi=0;score=0;renderQuiz()">Repetir quiz</button>`;
+  },850);
+}
+renderQuiz();
+</script>
+</body>
+</html>
